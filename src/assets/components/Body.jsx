@@ -1,25 +1,16 @@
 import { RestaurantCard } from "./RestaurantCard";
 import { useState, useEffect } from "react";
-import Shimmer from "./Shimmer"
+import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
+import { filterData } from "./utils/helper";
+import useOnline from './Hooks/useOnline';
 
-
-function filterData(searchText, restaurants) {
-  const filterData = restaurants.filter((restaurant) =>
-    restaurant?.data?.name.toLowerCase().includes(searchText.toLowerCase())
-  );
-  return filterData;
-}
-
-// Body Component for body section: It contain all restaurant cards
-// We are mapping restaurantList array and passing JSON data to RestaurantCard component as props with unique key as index
 const Body = () => {
   // useState: To create a state variable, searchText is local state variable
-  const[allRestaurants,setAllRestaurants]=useState([])
+  const [allRestaurants, setAllRestaurants] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
 
-  
   async function getRestaurants() {
     const data = await fetch(
       "https://www.swiggy.com/dapi/restaurants/list/v5?lat=21.1702401&lng=72.83106070000001&page_type=DESKTOP_WEB_LISTING"
@@ -33,14 +24,17 @@ const Body = () => {
     getRestaurants();
   }, []);
 
-  console.log("render");
-
-  if(!allRestaurants) return null;
+  if (!allRestaurants) return null;
 
   // if(filteredRestaurants?.length===0)
   // return<h1>No Restaurant to match your filter!</h1>
-
-  return (filteredRestaurants.length === 0) ? <Shimmer/> :(
+  const isOnline = useOnline();
+  if (!isOnline) {
+    return <h1>Offline, please check your internet connection</h1>;
+  }
+  return filteredRestaurants.length === 0 ? (
+    <Shimmer />
+  ) : (
     <>
       <div className="search-container">
         <input
@@ -53,9 +47,7 @@ const Body = () => {
         <button
           className="search-btn"
           onClick={() => {
-            // filter the data
             const data = filterData(searchText, allRestaurants);
-            // update the state of restaurants list
             setFilteredRestaurants(data);
           }}
         >
@@ -66,10 +58,12 @@ const Body = () => {
         {filteredRestaurants.map((restaurant) => {
           return (
             <Link
-                to={"/restaurant/" + restaurant.data.id}
-                key={restaurant.data.id}
-              > <RestaurantCard key={restaurant.data.id} {...restaurant.data} /></Link>
-           
+              to={"/restaurant/" + restaurant.data.id}
+              key={restaurant.data.id}
+            >
+              {" "}
+              <RestaurantCard key={restaurant.data.id} {...restaurant.data} />
+            </Link>
           );
         })}
       </div>
