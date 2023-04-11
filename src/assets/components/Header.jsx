@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import UserContext from "./utils/UserContext";
+import {useSelector} from "react-redux"
 
 const Title = () => (
   <a href="/">
@@ -13,7 +14,7 @@ const Title = () => (
 );
 function Header() {
   const {user} = useContext(UserContext);
-  console.log(user.user)
+  const cart =useSelector(store=>store.cart.items)
   return (
     <div className="header">
       <Title />
@@ -30,6 +31,7 @@ function Header() {
           </li>
           <li>
             <Link to="/cart">Cart</Link>
+            <sup> {cart.length} </sup>
           </li>
           <li>
             <Link to="/instamart">Instamart</Link>

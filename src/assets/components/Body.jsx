@@ -3,13 +3,16 @@ import { useState, useEffect } from "react";
 import Shimmer from "./Shimmer";
 import { Link } from "react-router-dom";
 import { filterData } from "./utils/helper";
-import useOnline from './Hooks/useOnline';
+import useOnline from "./Hooks/useOnline";
+import { useContext } from "react";
+import UserContext from "./utils/UserContext";
 
 const Body = () => {
   // useState: To create a state variable, searchText is local state variable
   const [allRestaurants, setAllRestaurants] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [filteredRestaurants, setFilteredRestaurants] = useState([]);
+  const { user, setUser } = useContext(UserContext);
 
   async function getRestaurants() {
     const data = await fetch(
@@ -53,6 +56,12 @@ const Body = () => {
         >
           Search
         </button>
+        <input
+          value={user.user}
+          onChange={e =>
+            setUser({ name: e.target.value, email: "add@gmail.com" })
+          }
+        ></input>
       </div>
       <div className="restaurant-list">
         {filteredRestaurants.map((restaurant) => {

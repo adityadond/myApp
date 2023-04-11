@@ -1,5 +1,5 @@
 import "./App.css";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense,useState } from "react";
 import Header from "./assets/components/Header";
 import Body from "./assets/components/Body";
 import Footer from "./assets/components/Footer";
@@ -11,11 +11,20 @@ import Error from "./assets/components/Error";
 import RestaurantMenu from "./assets/components/RestaurantMenu";
 import Profile from "./assets/components/Profile";
 import Shimmer from "./assets/components/Shimmer";
+import UserContext from "./assets/components/utils/UserContext";
+import { Provider } from "react-redux";
+import store from "./assets/components/utils/store";
 // import Instamart from "./assets/components/Instamart";
 
 const Instamart = lazy(() => import("./assets/components/Instamart"));
 
 const AppLayout = () => {
+  const [user,setUser]=useState({
+user:"Adityaa",
+email:"hzdkv@example.com"
+})
+
+  
   return (
     /*
  #Header:
@@ -32,10 +41,16 @@ const AppLayout = () => {
  # Footer
   * */
     <>
-      <Header />
-      <Outlet />
-
-      <Footer />
+    <Provider store={store}>
+      <UserContext.Provider value={{
+        user:user,
+        setUser:setUser,
+      }}>
+        <Header />
+        <Outlet />
+        <Footer />
+      </UserContext.Provider>
+      </Provider>
     </>
   );
 };
