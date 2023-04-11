@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import UserContext from "./utils/UserContext";
 
 const Title = () => (
   <a href="/">
@@ -10,6 +12,8 @@ const Title = () => (
   </a>
 );
 function Header() {
+  const {user} = useContext(UserContext);
+  console.log(user.user)
   return (
     <div className="header">
       <Title />
@@ -30,6 +34,7 @@ function Header() {
           <li>
             <Link to="/instamart">Instamart</Link>
           </li>
+         <span>Hi {user.user}</span> 
         </ul>
       </div>
     </div>

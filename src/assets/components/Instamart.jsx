@@ -1,12 +1,44 @@
-import React from 'react'
+import React, { useState } from "react";
+
+const Section = ({ title, desc }) => {
+  const [isVisible, setIsVisible] = useState(true);
+  return (
+    <>
+      <h3>{title}</h3>
+
+      {isVisible ? (
+        <button onClick={() => setIsVisible(false)}> Hide</button>
+      ) : (
+        <button onClick={() => setIsVisible(true)}> Show</button>
+      )}
+
+      {isVisible && <p>{desc}</p>}
+    </>
+  );
+};
 
 function Instamart() {
   return (
     <div>
-        <h1>Instamart</h1>
-        <h1>100 of components inside it</h1>
+      {/* <AboutInstamart/>
+        <DetailsOfInstamart/>
+        <TeamInstamart/>
+        <Product/>
+        <Carrers/> */}
+      <Section
+        title="AboutInstamart"
+        desc={"This is about section of instamrt"}
+      />
+      <hr></hr>
+      <Section
+        title="TeamInstamart"
+        desc={"This is TeamInstamart section of instamrt"}
+      />
+      <hr></hr>
+      <Section title="Carrers" desc={"This is Carrers section of instamrt"} />
+      <hr></hr>
     </div>
-  )
+  );
 }
 
-export default Instamart
+export default Instamart;
